@@ -9,6 +9,7 @@ import swervelib.encoders.AnalogAbsoluteEncoderSwerve;
 import swervelib.encoders.CANCoderSwerve;
 import swervelib.encoders.CanAndCoderSwerve;
 import swervelib.encoders.PWMDutyCycleEncoderSwerve;
+import swervelib.encoders.SparkMaxAnalogEncoderSwerve;
 import swervelib.encoders.SparkMaxEncoderSwerve;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.imu.ADIS16448Swerve;
@@ -53,12 +54,19 @@ public class DeviceJson
    */
   public SwerveAbsoluteEncoder createEncoder(SwerveMotor motor)
   {
+    if (id > 40)
+    {
+      DriverStation.reportWarning("CAN IDs greater than 40 can cause undefined behaviour, please use a CAN ID below 40!",
+                                  false);
+    }
     switch (type)
     {
       case "none":
       case "integrated":
       case "attached":
         return null;
+      case "sparkmax_analog":
+        return new SparkMaxAnalogEncoderSwerve(motor);
       case "canandcoder":
         return new SparkMaxEncoderSwerve(motor, 360);
       case "canandcoder_can":
@@ -66,11 +74,11 @@ public class DeviceJson
       case "ma3":
       case "ctre_mag":
       case "rev_hex":
+      case "throughbore":
       case "am_mag":
       case "dutycycle":
         return new PWMDutyCycleEncoderSwerve(id);
       case "thrifty":
-      case "throughbore":
       case "analog":
         return new AnalogAbsoluteEncoderSwerve(id);
       case "cancoder":
@@ -87,6 +95,11 @@ public class DeviceJson
    */
   public SwerveIMU createIMU()
   {
+    if (id > 40)
+    {
+      DriverStation.reportWarning("CAN IDs greater than 40 can cause undefined behaviour, please use a CAN ID below 40!",
+                                  false);
+    }
     switch (type)
     {
       case "adis16448":
@@ -97,6 +110,7 @@ public class DeviceJson
         return new ADXRS450Swerve();
       case "analog":
         return new AnalogGyroSwerve(id);
+      case "navx":
       case "navx_spi":
         return new NavXSwerve(SPI.Port.kMXP);
       case "navx_i2c":
@@ -106,12 +120,9 @@ public class DeviceJson
             ".html#onboard-i2c-causing-system-lockups",
             false);
         return new NavXSwerve(I2C.Port.kMXP);
-      case "navx_onborard":
-        return new NavXSwerve(Port.kOnboard);
       case "navx_usb":
         return new NavXSwerve(Port.kUSB);
       case "navx_mxp":
-      case "navx":
         return new NavXSwerve(Port.kMXP);
       case "pigeon":
         return new PigeonSwerve(id);
@@ -130,6 +141,11 @@ public class DeviceJson
    */
   public SwerveMotor createMotor(boolean isDriveMotor)
   {
+    if (id > 40)
+    {
+      DriverStation.reportWarning("CAN IDs greater than 40 can cause undefined behaviour, please use a CAN ID below 40!",
+                                  false);
+    }
     switch (type)
     {
       case "sparkmax_brushed":
