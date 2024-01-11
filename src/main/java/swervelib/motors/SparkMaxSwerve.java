@@ -62,7 +62,7 @@ public class SparkMaxSwerve extends SwerveMotor
         encoder); // Configure feedback of the PID controller as the integrated encoder.
 
     // Spin off configurations in a different thread.
-    configureSparkMax(() -> motor.setCANTimeout(0));
+    // configureSparkMax(() -> motor.setCANTimeout(0)); // Commented out because it prevents feedback.
   }
 
   /**
@@ -214,19 +214,23 @@ public class SparkMaxSwerve extends SwerveMotor
       configureSparkMax(() -> {
         if (absoluteEncoder.getAbsoluteEncoder() instanceof AbsoluteEncoder)
         {
-          return ((AbsoluteEncoder) absoluteEncoder.getAbsoluteEncoder()).setPositionConversionFactor(positionConversionFactor);
+          return ((AbsoluteEncoder) absoluteEncoder.getAbsoluteEncoder()).setPositionConversionFactor(
+              positionConversionFactor);
         } else
         {
-          return ((SparkMaxAnalogSensor)absoluteEncoder.getAbsoluteEncoder()).setPositionConversionFactor(positionConversionFactor);
+          return ((SparkMaxAnalogSensor) absoluteEncoder.getAbsoluteEncoder()).setPositionConversionFactor(
+              positionConversionFactor);
         }
       });
       configureSparkMax(() -> {
         if (absoluteEncoder.getAbsoluteEncoder() instanceof AbsoluteEncoder)
         {
-          return ((AbsoluteEncoder) absoluteEncoder.getAbsoluteEncoder()).setVelocityConversionFactor(positionConversionFactor / 60);
+          return ((AbsoluteEncoder) absoluteEncoder.getAbsoluteEncoder()).setVelocityConversionFactor(
+              positionConversionFactor / 60);
         } else
         {
-          return ((SparkMaxAnalogSensor)absoluteEncoder.getAbsoluteEncoder()).setVelocityConversionFactor(positionConversionFactor / 60);
+          return ((SparkMaxAnalogSensor) absoluteEncoder.getAbsoluteEncoder()).setVelocityConversionFactor(
+              positionConversionFactor / 60);
         }
       });
     }
